@@ -1,0 +1,16 @@
+# --- Keep private / local files out of the public repo ----------------------
+
+# Personal setup notes that were already in this folder (not part of the site).
+Login and Setup Details.docx
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.vscode/
+.idea/
+
+# Python cache (from build_pdfs.py)
+__pycache__/
+*.pyc

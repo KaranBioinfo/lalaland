@@ -1,0 +1,523 @@
+/* =============================================================================
+   style.css — the single stylesheet that controls the whole site.
+
+   HOW THIS FILE IS ORGANISED (top to bottom):
+     1. Design tokens  — all colours, fonts and sizes as CSS variables (:root)
+     2. Base / reset   — sensible defaults for the raw HTML elements
+     3. Layout helpers — the centered content container, section spacing
+     4. Navigation     — top nav bar + wordmark
+     5. Hero           — large photo, responsive video, intro text
+     6. Content blocks — "Life and Views", essays, contact, call-out strip
+     7. Footer
+     8. Responsive     — small tweaks for narrow (mobile) screens
+
+   The whole look is driven by the variables in section 1. Change a value
+   there once and it updates everywhere it is used.
+   ========================================================================== */
+
+
+/* -----------------------------------------------------------------------------
+   1. DESIGN TOKENS
+   These CSS custom properties (variables) are defined on :root (the <html>
+   element) so every rule below can read them with var(--name).
+   Edit colours, spacing or fonts here to re-skin the entire site.
+   -------------------------------------------------------------------------- */
+:root {
+  /* --- Colour palette: dark & cinematic ---------------------------------- */
+  --color-bg:            #0b0a09;  /* near-black page background              */
+  --color-surface:       #14110e;  /* slightly lifted panels / strips        */
+  --color-surface-2:     #1d1813;  /* hover / nested surface                 */
+
+  --color-accent:        #b07a4b;  /* warm royal-brown: headings, links, btns */
+  --color-accent-hover:  #d09a67;  /* lighter brown for hover / focus        */
+
+  --color-text:          #ede8e1;  /* primary text: warm near-white          */
+  --color-text-muted:    #948f88;  /* secondary text: gray                   */
+
+  --color-border:        #2a2521;  /* hairline borders / dividers            */
+
+  /* --- Typography -------------------------------------------------------- */
+  /* System font stacks: no web-font download, fast and readable everywhere. */
+  --font-sans:  system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", Cambria, serif; /* used for headings */
+
+  --fs-hero:    clamp(2.4rem, 6vw, 4rem);   /* big hero headline (fluid)      */
+  --fs-h1:      clamp(1.9rem, 4vw, 2.6rem);
+  --fs-h2:      clamp(1.4rem, 3vw, 1.8rem);
+  --fs-body:    1.05rem;
+  --line-body:  1.75;                        /* generous line-height for prose */
+
+  /* --- Spacing & sizing -------------------------------------------------- */
+  --max-width:    1040px;  /* max width of the centered content column        */
+  --max-text:     680px;   /* narrower width for long-form reading comfort    */
+  --gap:          1.25rem; /* default gap between stacked elements            */
+  --section-pad:  clamp(3rem, 8vw, 6rem); /* vertical padding between sections */
+  --radius:       10px;    /* corner radius for cards, buttons, media         */
+
+  --transition:   180ms ease; /* shared easing for hovers / accordions        */
+}
+
+
+/* -----------------------------------------------------------------------------
+   2. BASE / RESET
+   A light reset so browsers start from the same place.
+   -------------------------------------------------------------------------- */
+
+/* border-box makes width/padding math predictable across every element. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Strip default margins; we add spacing deliberately below. */
+html,
+body,
+h1, h2, h3, h4,
+p, ul, ol, figure {
+  margin: 0;
+}
+
+html {
+  /* Smooth scrolling when jumping to in-page anchors (e.g. footer links). */
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--line-body);
+  /* Font smoothing for crisper text on dark backgrounds. */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* min-height + flex column keeps the footer at the bottom on short pages. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Headings use the serif stack and the warm brown accent for a cinematic feel. */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  color: var(--color-accent);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* Links: brown by default, lighter brown on hover/focus. */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover,
+a:focus-visible {
+  color: var(--color-accent-hover);
+}
+
+/* Make images and iframes shrink to fit their container by default. */
+img,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+/* Visible keyboard-focus outline for accessibility. */
+:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 3px;
+}
+
+
+/* -----------------------------------------------------------------------------
+   3. LAYOUT HELPERS
+   -------------------------------------------------------------------------- */
+
+/* .container centers content and caps its width; reused on every page. */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;        /* center horizontally */
+  padding-inline: 1.5rem;     /* side gutters, also keeps content off edges */
+}
+
+/* <main> grows to fill available height so the footer sits at the bottom. */
+main {
+  flex: 1 0 auto;
+}
+
+/* Vertical rhythm between major page sections. */
+.section {
+  padding-block: var(--section-pad);
+}
+
+/* A thin divider line between sections when we want visual separation. */
+.section + .section {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Constrains prose to a comfortable reading measure. */
+.prose {
+  max-width: var(--max-text);
+}
+.prose p {
+  color: var(--color-text-muted); /* body copy is gray (secondary) */
+  margin-bottom: 1.1rem;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* -----------------------------------------------------------------------------
+   4. NAVIGATION (top bar)
+   Layout: wordmark on the left, links on the right, using flexbox.
+   -------------------------------------------------------------------------- */
+.site-nav {
+  position: sticky;           /* stays pinned to the top while scrolling */
+  top: 0;
+  z-index: 10;
+  background-color: rgba(11, 10, 9, 0.82); /* semi-transparent bg ... */
+  backdrop-filter: blur(8px);              /* ... with a frosted blur  */
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes wordmark + links apart */
+  min-height: 68px;
+}
+
+/* The "Lalaland" wordmark — placeholder brand text, easy to change in HTML. */
+.wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text);   /* wordmark stays near-white, not brown */
+}
+.wordmark:hover,
+.wordmark:focus-visible {
+  color: var(--color-accent-hover);
+}
+
+/* The nav links list, laid out in a row. */
+.nav-links {
+  list-style: none;           /* remove bullet points */
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.98rem;
+}
+.nav-links a {
+  color: var(--color-text-muted); /* gray until hovered */
+}
+.nav-links a:hover,
+.nav-links a:focus-visible,
+.nav-links a[aria-current="page"] {   /* highlight the current page */
+  color: var(--color-accent);
+}
+
+
+/* -----------------------------------------------------------------------------
+   5. HERO (home page top section)
+   -------------------------------------------------------------------------- */
+.hero {
+  padding-block: var(--section-pad);
+}
+.hero__title {
+  font-size: var(--fs-hero);
+  margin-bottom: 1.2rem;
+}
+.hero__intro {
+  max-width: var(--max-text);
+  color: var(--color-text-muted);
+  font-size: 1.15rem;
+  margin-bottom: 2.5rem;
+}
+
+/* The media grid holds the hero photo and video side by side on wide screens,
+   and stacks them on narrow screens (see the responsive section). */
+.hero__media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+
+/* Hero photo: rounded corners + subtle border to frame it on the dark bg. */
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* fill the box without distortion */
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+/* --- Responsive 16:9 video wrapper -------------------------------------
+   The classic padding-top trick: a wrapper with 56.25% top padding
+   (9 / 16 = 0.5625) holds its aspect ratio at any width, and the iframe
+   is stretched to fill it absolutely. Works in every browser. */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;        /* 16:9 aspect ratio */
+  border-radius: var(--radius);
+  overflow: hidden;           /* clip the iframe corners to the radius */
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+.video-wrapper iframe {
+  position: absolute;
+  inset: 0;                   /* top/right/bottom/left all 0 */
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
+/* -----------------------------------------------------------------------------
+   6. CONTENT BLOCKS
+   -------------------------------------------------------------------------- */
+
+/* Shared small label above section headings (optional eyebrow text). */
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.section__title {
+  font-size: var(--fs-h1);
+  margin-bottom: 1.5rem;
+}
+
+/* --- Buttons ------------------------------------------------------------ */
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-accent);
+  background-color: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+}
+.btn:hover,
+.btn:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-bg);     /* dark text on brown fill when hovered */
+}
+
+/* --- Call-out strip ("New features coming soon") ------------------------ */
+.callout {
+  background-color: var(--color-surface);
+  border-block: 1px solid var(--color-border);
+  text-align: center;
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+.callout__text {
+  font-family: var(--font-serif);
+  font-size: var(--fs-h2);
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+/* --- Essays accordion --------------------------------------------------- */
+/* Each essay is one <article class="essay">. The title is a button that
+   toggles the panel below it open/closed (behaviour lives in script.js). */
+.essay-list {
+  max-width: var(--max-text);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.essay {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+/* The clickable title row. It's a real <button> for keyboard + screen-reader
+   support; we reset its default look to match our design. */
+.essay__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+  padding: 1.1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  transition: background-color var(--transition);
+}
+.essay__toggle:hover {
+  background-color: var(--color-surface-2);
+}
+
+/* The little +/- indicator on the right. We rotate it when open. */
+.essay__icon {
+  flex: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  transition: transform var(--transition);
+}
+.essay__toggle[aria-expanded="true"] .essay__icon {
+  transform: rotate(45deg);   /* a "+" becomes an "x"-like close marker */
+}
+
+/* --- The collapsible panel ---------------------------------------------
+   Smooth accordion trick: we animate max-height between 0 and a large value.
+   The panel starts collapsed (max-height:0, hidden overflow). script.js sets
+   the exact pixel height so the transition is smooth, then toggles a class. */
+.essay__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition);
+}
+.essay__panel-inner {
+  /* Padding lives on an inner element so it doesn't affect the collapsed
+     (max-height:0) state — the outer panel can close fully to zero. */
+  padding: 0 1.25rem 1.4rem;
+  color: var(--color-text-muted);
+}
+.essay__panel-inner p {
+  margin-bottom: 1rem;
+}
+.essay__panel-inner h3 {
+  font-size: 1.15rem;
+  margin: 1.2rem 0 0.6rem;
+}
+
+/* The download-PDF button sits at the bottom of the open panel. */
+.essay__actions {
+  margin-top: 1.2rem;
+}
+
+/* --- Contact page ------------------------------------------------------- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 5vw, 3rem);
+  align-items: start;
+}
+.contact__photo {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+/* A simple definition-style list of contact details. */
+.contact__list {
+  list-style: none;
+  padding: 0;
+}
+.contact__list li {
+  padding-block: 0.7rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.contact__list li:last-child {
+  border-bottom: none;
+}
+.contact__label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.2rem;
+}
+
+
+/* -----------------------------------------------------------------------------
+   7. FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer {
+  flex: none;                 /* don't grow; main already fills the gap */
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  padding-block: 2.5rem;
+}
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.site-footer .wordmark {
+  font-size: 1.2rem;
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+.footer-links a {
+  color: var(--color-text-muted);
+}
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: var(--color-accent);
+}
+
+
+/* -----------------------------------------------------------------------------
+   8. RESPONSIVE (mobile)
+   Everything above is written desktop-first; these overrides kick in on
+   narrow screens. 720px is our breakpoint for stacking two-column layouts.
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  /* Stack the hero photo + video vertically instead of side by side. */
+  .hero__media {
+    grid-template-columns: 1fr;
+  }
+  /* Stack the contact photo + details vertically. */
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Tighten the nav: smaller gap, slightly smaller links. */
+  .nav-links {
+    gap: 1rem;
+    font-size: 0.9rem;
+  }
+  /* Let the footer wordmark + links stack neatly. */
+  .site-footer .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Extra-small phones: hide the wordmark subtlety isn't needed, but we can
+   reduce the nav height a touch for more vertical room. */
+@media (max-width: 420px) {
+  .site-nav .container {
+    min-height: 58px;
+  }
+}
+
+/* Respect users who prefer reduced motion: turn off smooth animations. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+  }
+}

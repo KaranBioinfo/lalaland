@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+  index.html — Home page.
+  Structure of every page on this site:
+    <head>   : metadata + link to the one shared stylesheet (style.css)
+    <nav>    : top navigation (wordmark + links)
+    <main>   : the unique content of this page
+    <footer> : shared footer (wordmark + links)
+    <script> : the one shared script (script.js) — only needed by essays.html,
+               but harmless to include; we only load it where used (essays).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Makes the site scale correctly on phones (mobile-responsive). -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Lalaland — Home</title>
+  <meta name="description" content="Personal site of Lalaland — essays, views, and work." />
+
+  <!-- The single shared stylesheet that controls the entire look. -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ======================= TOP NAVIGATION ========================= -->
+  <nav class="site-nav">
+    <div class="container">
+      <!-- WORDMARK (placeholder brand text). Change "Lalaland" here. -->
+      <a href="index.html" class="wordmark">Lalaland</a>
+
+      <!-- Nav links, top-right. aria-current marks the active page. -->
+      <ul class="nav-links">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="essays.html">Essays</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================ MAIN ============================== -->
+  <main>
+
+    <!-- ----------------------- HERO SECTION ----------------------- -->
+    <section class="hero">
+      <div class="container">
+
+        <h1 class="hero__title">A place for thought,<br />craft, and quiet views.</h1>
+
+        <!-- Intro paragraph (placeholder copy — replace with your own). -->
+        <p class="hero__intro">
+          Welcome to Lalaland. This is placeholder introduction text: a short,
+          warm paragraph that sets the tone for the whole site. Swap it out for
+          a sentence or two about who you are and what a visitor will find here.
+        </p>
+
+        <!-- Hero media: one large photo + one embedded video, side by side. -->
+        <div class="hero__media">
+
+          <!-- PLACEHOLDER PHOTO. Replace the file in assets/img/ (keep the
+               same name) or point src at your own image. -->
+          <img
+            class="hero__photo"
+            src="assets/img/hero.svg"
+            alt="Placeholder hero image"
+            width="800" height="600"
+          />
+
+          <!-- ===================================================================
+               VIMEO VIDEO EMBED (responsive 16:9)
+               -------------------------------------------------------------------
+               >>> PASTE YOUR REAL VIMEO ID OR URL HERE <<<
+               Replace the number 76979871 below with your own video's ID.
+               For an unlisted video, Vimeo gives you a privacy hash too; include
+               it as ?h=XXXXXXXX. Example final src for an unlisted video:
+                 https://player.vimeo.com/video/123456789?h=abcdef1234
+               Full embed code is also available from your video's Share menu on
+               Vimeo — but only the src URL below needs to change.
+               =================================================================== -->
+          <div class="video-wrapper">
+            <iframe
+              src="https://player.vimeo.com/video/76979871"
+              title="Vimeo video player (placeholder)"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <!-- =================== END VIMEO EMBED ============================ -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- --------------------- LIFE AND VIEWS ----------------------- -->
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">About</p>
+        <h2 class="section__title">Life and Views</h2>
+
+        <!-- A few paragraphs of placeholder prose. No timeline / years / awards. -->
+        <div class="prose">
+          <p>
+            This is placeholder text for the Life and Views section. Use it to
+            share how you see the world — the ideas you keep returning to, the
+            principles behind your work, the things that make you curious.
+          </p>
+          <p>
+            Keep it personal and unhurried. A second paragraph can go a little
+            deeper: what you value, what you're exploring right now, and the
+            kind of conversations you hope this site starts.
+          </p>
+          <p>
+            A third paragraph leaves room to breathe. There's no timeline here
+            and no list of accolades — just a point of view, written plainly.
+            Replace all of this with your own words whenever you're ready.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------- CALL-OUT STRIP ------------------------ -->
+    <!-- Text only — no form, no input. -->
+    <section class="callout">
+      <p class="callout__text">New features coming soon</p>
+    </section>
+
+  </main>
+
+  <!-- =========================== FOOTER ============================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <a href="index.html" class="wordmark">Lalaland</a>
+      <!-- Same three links as the top nav. -->
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="essays.html">Essays</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

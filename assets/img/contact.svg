@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Placeholder portrait for the Contact page. Swap for your own photo
+     (keep the name contact.svg, or change the src in contact.html). 4:5. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" role="img"
+     aria-label="Placeholder portrait">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1813"/>
+      <stop offset="1" stop-color="#0b0a09"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="750" fill="url(#bg2)"/>
+  <!-- A simple abstract portrait silhouette in the brown accent. -->
+  <circle cx="300" cy="300" r="110" fill="#b07a4b" opacity="0.6"/>
+  <path d="M140 680 C140 520 260 450 300 450 C340 450 460 520 460 680 Z"
+        fill="#b07a4b" opacity="0.4"/>
+  <text x="300" y="715" text-anchor="middle"
+        font-family="Georgia, serif" font-size="24" fill="#948f88">
+    Placeholder portrait
+  </text>
+</svg>

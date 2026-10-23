@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--
+  essays.html — Essays page.
+
+  How the essays work:
+    - The real text of each essay lives in its own file: essays/essay-1.md etc.
+    - On page load, script.js FETCHES each .md file and renders it into the
+      matching accordion panel. That way the page always shows whatever is in
+      the .md file — edit the .md and the site updates automatically.
+    - Each essay's "Download PDF" button points at a pre-generated PDF in
+      assets/pdf/ (build them with: python build_pdfs.py). Text and PDF stay
+      in sync because both come from the same .md source file.
+
+  NOTE: because the page fetches local files, preview it through a local web
+  server (see README / the command printed at the end of setup), not by
+  double-clicking the file. Over file:// the browser blocks fetch().
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lalaland — Essays</title>
+  <meta name="description" content="Essays by Lalaland on the topics below." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ======================= TOP NAVIGATION ========================= -->
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="wordmark">Lalaland</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="essays.html" aria-current="page">Essays</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================ MAIN ============================== -->
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Writing</p>
+        <h1 class="section__title">Essays</h1>
+
+        <!-- Short intro blurb (placeholder wording). -->
+        <div class="prose" style="margin-bottom: 2.5rem;">
+          <p>Essays on the topics below. Click any title to read the full piece
+             inline, or download it as a PDF.</p>
+        </div>
+
+        <!-- ===================== ESSAY ACCORDION =====================
+             Each <article class="essay"> has:
+               - a <button class="essay__toggle"> title that opens/closes it
+               - a <div class="essay__panel"> that holds the text + PDF button
+             data-essay points at the source .md file; script.js loads it into
+             the .essay__text container. data-pdf points at the download file.
+             The aria-* attributes wire up accessibility + the open/closed state.
+        -->
+        <div class="essay-list">
+
+          <!-- ---------- Essay 1 ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button
+                class="essay__toggle"
+                id="essay-1-toggle"
+                aria-expanded="false"
+                aria-controls="essay-1-panel"
+                data-essay="essays/essay-1.md">
+                <span>On Beginnings</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div
+              class="essay__panel"
+              id="essay-1-panel"
+              role="region"
+              aria-labelledby="essay-1-toggle">
+              <div class="essay__panel-inner">
+                <!-- Essay text is injected here by script.js from the .md file. -->
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <!-- download attribute prompts a file download of the PDF. -->
+                  <a class="btn" href="assets/pdf/essay-1.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ---------- Essay 2 ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button
+                class="essay__toggle"
+                id="essay-2-toggle"
+                aria-expanded="false"
+                aria-controls="essay-2-panel"
+                data-essay="essays/essay-2.md">
+                <span>The Shape of Attention</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div
+              class="essay__panel"
+              id="essay-2-panel"
+              role="region"
+              aria-labelledby="essay-2-toggle">
+              <div class="essay__panel-inner">
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <a class="btn" href="assets/pdf/essay-2.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ---------- Essay 3 ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button
+                class="essay__toggle"
+                id="essay-3-toggle"
+                aria-expanded="false"
+                aria-controls="essay-3-panel"
+                data-essay="essays/essay-3.md">
+                <span>Notes on Making Things</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div
+              class="essay__panel"
+              id="essay-3-panel"
+              role="region"
+              aria-labelledby="essay-3-toggle">
+              <div class="essay__panel-inner">
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <a class="btn" href="assets/pdf/essay-3.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /.essay-list -->
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================== FOOTER ============================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <a href="index.html" class="wordmark">Lalaland</a>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="essays.html">Essays</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- The shared script: handles the accordion open/close + loading the .md
+       files. Loaded at the end of <body> so the HTML exists before it runs. -->
+  <script src="script.js"></script>
+</body>
+</html>
