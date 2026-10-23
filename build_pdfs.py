@@ -219,9 +219,9 @@ def main():
     out_dir = os.path.join(here, "assets", "pdf")
     os.makedirs(out_dir, exist_ok=True)
 
-    md_files = sorted(glob.glob(os.path.join(src_dir, "essay-*.md")))
+    md_files = sorted(glob.glob(os.path.join(src_dir, "*.md")))
     if not md_files:
-        print("No essays/essay-*.md files found — nothing to build.")
+        print("No essays/*.md files found — nothing to build.")
         return
 
     for md_path in md_files:

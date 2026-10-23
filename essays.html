@@ -41,7 +41,6 @@
   <main>
     <section class="section">
       <div class="container">
-        <p class="eyebrow">Writing</p>
         <h1 class="section__title">Essays</h1>
 
         <!-- Short intro blurb (placeholder wording). -->
@@ -58,86 +57,135 @@
              the .essay__text container. data-pdf points at the download file.
              The aria-* attributes wire up accessibility + the open/closed state.
         -->
+        <!-- Each essay: the TOGGLE shows the topic; when opened, script.js loads
+             the matching essays/<topic>.md file (its "# Title" line becomes the
+             small subheading, then the essay body). The Download PDF button
+             points at the pre-built PDF of the same name. To add another essay
+             later, copy one <article> block and change the topic + file names. -->
         <div class="essay-list">
 
-          <!-- ---------- Essay 1 ---------- -->
+          <!-- ---------- Religion ---------- -->
           <article class="essay">
             <h2 style="margin:0;">
-              <button
-                class="essay__toggle"
-                id="essay-1-toggle"
-                aria-expanded="false"
-                aria-controls="essay-1-panel"
-                data-essay="essays/essay-1.md">
-                <span>On Beginnings</span>
+              <button class="essay__toggle" id="religion-toggle"
+                      aria-expanded="false" aria-controls="religion-panel"
+                      data-essay="essays/religion.md">
+                <span>Religion</span>
                 <span class="essay__icon" aria-hidden="true">+</span>
               </button>
             </h2>
-            <div
-              class="essay__panel"
-              id="essay-1-panel"
-              role="region"
-              aria-labelledby="essay-1-toggle">
+            <div class="essay__panel" id="religion-panel" role="region"
+                 aria-labelledby="religion-toggle">
               <div class="essay__panel-inner">
                 <!-- Essay text is injected here by script.js from the .md file. -->
                 <div class="essay__text"><p>Loading…</p></div>
                 <div class="essay__actions">
-                  <!-- download attribute prompts a file download of the PDF. -->
-                  <a class="btn" href="assets/pdf/essay-1.pdf" download>Download PDF</a>
+                  <a class="btn" href="assets/pdf/religion.pdf" download>Download PDF</a>
                 </div>
               </div>
             </div>
           </article>
 
-          <!-- ---------- Essay 2 ---------- -->
+          <!-- ---------- Work ---------- -->
           <article class="essay">
             <h2 style="margin:0;">
-              <button
-                class="essay__toggle"
-                id="essay-2-toggle"
-                aria-expanded="false"
-                aria-controls="essay-2-panel"
-                data-essay="essays/essay-2.md">
-                <span>The Shape of Attention</span>
+              <button class="essay__toggle" id="work-toggle"
+                      aria-expanded="false" aria-controls="work-panel"
+                      data-essay="essays/work.md">
+                <span>Work</span>
                 <span class="essay__icon" aria-hidden="true">+</span>
               </button>
             </h2>
-            <div
-              class="essay__panel"
-              id="essay-2-panel"
-              role="region"
-              aria-labelledby="essay-2-toggle">
+            <div class="essay__panel" id="work-panel" role="region"
+                 aria-labelledby="work-toggle">
               <div class="essay__panel-inner">
                 <div class="essay__text"><p>Loading…</p></div>
                 <div class="essay__actions">
-                  <a class="btn" href="assets/pdf/essay-2.pdf" download>Download PDF</a>
+                  <a class="btn" href="assets/pdf/work.pdf" download>Download PDF</a>
                 </div>
               </div>
             </div>
           </article>
 
-          <!-- ---------- Essay 3 ---------- -->
+          <!-- ---------- Nukes and Democracy ---------- -->
           <article class="essay">
             <h2 style="margin:0;">
-              <button
-                class="essay__toggle"
-                id="essay-3-toggle"
-                aria-expanded="false"
-                aria-controls="essay-3-panel"
-                data-essay="essays/essay-3.md">
-                <span>Notes on Making Things</span>
+              <button class="essay__toggle" id="nukes-toggle"
+                      aria-expanded="false" aria-controls="nukes-panel"
+                      data-essay="essays/nukes-and-democracy.md">
+                <span>Nukes and Democracy</span>
                 <span class="essay__icon" aria-hidden="true">+</span>
               </button>
             </h2>
-            <div
-              class="essay__panel"
-              id="essay-3-panel"
-              role="region"
-              aria-labelledby="essay-3-toggle">
+            <div class="essay__panel" id="nukes-panel" role="region"
+                 aria-labelledby="nukes-toggle">
               <div class="essay__panel-inner">
                 <div class="essay__text"><p>Loading…</p></div>
                 <div class="essay__actions">
-                  <a class="btn" href="assets/pdf/essay-3.pdf" download>Download PDF</a>
+                  <a class="btn" href="assets/pdf/nukes-and-democracy.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ---------- Balding ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button class="essay__toggle" id="balding-toggle"
+                      aria-expanded="false" aria-controls="balding-panel"
+                      data-essay="essays/balding.md">
+                <span>Balding</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div class="essay__panel" id="balding-panel" role="region"
+                 aria-labelledby="balding-toggle">
+              <div class="essay__panel-inner">
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <a class="btn" href="assets/pdf/balding.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ---------- Capitalism ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button class="essay__toggle" id="capitalism-toggle"
+                      aria-expanded="false" aria-controls="capitalism-panel"
+                      data-essay="essays/capitalism.md">
+                <span>Capitalism</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div class="essay__panel" id="capitalism-panel" role="region"
+                 aria-labelledby="capitalism-toggle">
+              <div class="essay__panel-inner">
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <a class="btn" href="assets/pdf/capitalism.pdf" download>Download PDF</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ---------- Abortion ---------- -->
+          <article class="essay">
+            <h2 style="margin:0;">
+              <button class="essay__toggle" id="abortion-toggle"
+                      aria-expanded="false" aria-controls="abortion-panel"
+                      data-essay="essays/abortion.md">
+                <span>Abortion</span>
+                <span class="essay__icon" aria-hidden="true">+</span>
+              </button>
+            </h2>
+            <div class="essay__panel" id="abortion-panel" role="region"
+                 aria-labelledby="abortion-toggle">
+              <div class="essay__panel-inner">
+                <div class="essay__text"><p>Loading…</p></div>
+                <div class="essay__actions">
+                  <a class="btn" href="assets/pdf/abortion.pdf" download>Download PDF</a>
                 </div>
               </div>
             </div>

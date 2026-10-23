@@ -25,17 +25,20 @@ Then open <http://localhost:8000> in your browser. (Stop the server with Ctrl+C.
 ├── script.js         # Accordion open/close + loads essay text from the .md files
 ├── build_pdfs.py     # Regenerates the essay PDFs from the .md files (stdlib only)
 ├── essays/           # Source text for each essay — the single source of truth
-│   ├── essay-1.md
-│   ├── essay-2.md
-│   └── essay-3.md
+│   ├── religion.md   # (one .md file per essay, named by topic)
+│   ├── work.md
+│   ├── nukes-and-democracy.md
+│   ├── balding.md
+│   ├── capitalism.md
+│   └── abortion.md
 └── assets/
     ├── img/          # Images (placeholder SVGs — swap for your own)
     │   ├── hero.svg
     │   └── contact.svg
-    └── pdf/          # Pre-generated essay PDFs (built from essays/*.md)
-        ├── essay-1.pdf
-        ├── essay-2.pdf
-        └── essay-3.pdf
+    └── pdf/          # Pre-generated essay PDFs (one per .md, built by build_pdfs.py)
+        ├── religion.pdf
+        ├── work.pdf
+        └── ...
 ```
 
 ## Editing content

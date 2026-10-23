@@ -41,78 +41,62 @@
   <!-- ============================ MAIN ============================== -->
   <main>
 
-    <!-- ----------------------- HERO SECTION ----------------------- -->
+    <!-- ----------------------- HERO SECTION -----------------------
+         Full-width split: headline + intro + video on the LEFT, a large photo
+         on the RIGHT that bleeds to the edge of the screen. Stacks on mobile.
+         Note: this section is NOT inside .container — it spans the full width. -->
     <section class="hero">
-      <div class="container">
 
+      <!-- LEFT BLOCK: headline, intro, and the video beneath the text. -->
+      <div class="hero__left">
         <h1 class="hero__title">A place for thought,<br />craft, and quiet views.</h1>
 
-        <!-- Intro paragraph (placeholder copy — replace with your own). -->
+        <!-- Intro paragraph (edit this copy freely). -->
         <p class="hero__intro">
-          Welcome to Lalaland. This is placeholder introduction text: a short,
-          warm paragraph that sets the tone for the whole site. Swap it out for
-          a sentence or two about who you are and what a visitor will find here.
+          Welcome to Lalaland. Currently this houses some of my views in the
+          essays section, with a lot more to come.
         </p>
 
-        <!-- Hero media: one large photo + one embedded video, side by side. -->
-        <div class="hero__media">
-
-          <!-- PLACEHOLDER PHOTO. Replace the file in assets/img/ (keep the
-               same name) or point src at your own image. -->
-          <img
-            class="hero__photo"
-            src="assets/img/hero.svg"
-            alt="Placeholder hero image"
-            width="800" height="600"
-          />
-
-          <!-- ===================================================================
-               VIMEO VIDEO EMBED (responsive 16:9)
-               -------------------------------------------------------------------
-               >>> PASTE YOUR REAL VIMEO ID OR URL HERE <<<
-               Replace the number 76979871 below with your own video's ID.
-               For an unlisted video, Vimeo gives you a privacy hash too; include
-               it as ?h=XXXXXXXX. Example final src for an unlisted video:
-                 https://player.vimeo.com/video/123456789?h=abcdef1234
-               Full embed code is also available from your video's Share menu on
-               Vimeo — but only the src URL below needs to change.
-               =================================================================== -->
-          <div class="video-wrapper">
-            <iframe
-              src="https://player.vimeo.com/video/76979871"
-              title="Vimeo video player (placeholder)"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen>
-            </iframe>
-          </div>
-          <!-- =================== END VIMEO EMBED ============================ -->
-
+        <!-- ===================================================================
+             VIMEO VIDEO — click the preview to play it big in an overlay.
+             >>> YOUR REAL VIMEO URL lives in data-vimeo-src below <<<
+             Current: video 1238614874 (unlisted, hash b6209d690d).
+             To use a different video, replace the whole URL in data-vimeo-src.
+             =================================================================== -->
+        <div class="video" data-vimeo-src="https://player.vimeo.com/video/1238614874?h=b6209d690d">
+          <button type="button" class="video__facade" aria-haspopup="dialog">
+            <span class="video__play" aria-hidden="true"></span>
+            <span class="video__label">Watch the intro</span>
+          </button>
         </div>
+        <!-- =================== END VIMEO EMBED ============================ -->
       </div>
+
+      <!-- RIGHT BLOCK: large placeholder photo, bleeding to the screen edge.
+           Replace assets/img/hero.svg with your own image (keep the name, or
+           change the src here). -->
+      <div class="hero__right">
+        <figure class="hero__figure">
+          <img class="hero__photo" src="assets/img/hero.jpg" alt="A kitten wrapped in a baby blanket" />
+          <figcaption class="hero__caption">Here's a babycat in a baby blanket</figcaption>
+        </figure>
+      </div>
+
     </section>
 
     <!-- --------------------- LIFE AND VIEWS ----------------------- -->
     <section class="section">
       <div class="container">
-        <p class="eyebrow">About</p>
         <h2 class="section__title">Life and Views</h2>
 
-        <!-- A few paragraphs of placeholder prose. No timeline / years / awards. -->
-        <div class="prose">
+        <div class="prose prose--lead">
           <p>
-            This is placeholder text for the Life and Views section. Use it to
-            share how you see the world — the ideas you keep returning to, the
-            principles behind your work, the things that make you curious.
+            I've spent most of my time in Mumbai, San Francisco, and
+            Washington, DC.
           </p>
           <p>
-            Keep it personal and unhurried. A second paragraph can go a little
-            deeper: what you value, what you're exploring right now, and the
-            kind of conversations you hope this site starts.
-          </p>
-          <p>
-            A third paragraph leaves room to breathe. There's no timeline here
-            and no list of accolades — just a point of view, written plainly.
-            Replace all of this with your own words whenever you're ready.
+            I'm curious to see where our opinions, cultures, and
+            transformational technologies lead us.
           </p>
         </div>
       </div>
@@ -138,6 +122,20 @@
       </ul>
     </div>
   </footer>
+
+  <!-- Video lightbox: script.js injects the big player here when you click the
+       video preview, and removes it when you close (which stops playback). -->
+  <div class="video-modal" id="video-modal" hidden>
+    <div class="video-modal__backdrop" data-close></div>
+    <div class="video-modal__dialog" role="dialog" aria-modal="true" aria-label="Video player">
+      <button class="video-modal__close" type="button" data-close aria-label="Close video">&times;</button>
+      <div class="video-modal__frame"></div>
+    </div>
+  </div>
+
+  <!-- Shared script: powers the video lightbox here and the essay accordion
+       on the essays page. -->
+  <script src="script.js"></script>
 
 </body>
 </html>

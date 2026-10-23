@@ -3,6 +3,10 @@
 # Personal setup notes that were already in this folder (not part of the site).
 Login and Setup Details.docx
 
+# Source video/media kept locally — the site streams video from Vimeo instead.
+*.mp4
+*.mov
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db

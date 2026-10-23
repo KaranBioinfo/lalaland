@@ -24,9 +24,9 @@
    -------------------------------------------------------------------------- */
 :root {
   /* --- Colour palette: dark & cinematic ---------------------------------- */
-  --color-bg:            #0b0a09;  /* near-black page background              */
-  --color-surface:       #14110e;  /* slightly lifted panels / strips        */
-  --color-surface-2:     #1d1813;  /* hover / nested surface                 */
+  --color-bg:            #181410;  /* warm, friendly near-black background    */
+  --color-surface:       #211b16;  /* slightly lifted panels / strips        */
+  --color-surface-2:     #2a231d;  /* hover / nested surface                 */
 
   --color-accent:        #b07a4b;  /* warm royal-brown: headings, links, btns */
   --color-accent-hover:  #d09a67;  /* lighter brown for hover / focus        */
@@ -34,22 +34,32 @@
   --color-text:          #ede8e1;  /* primary text: warm near-white          */
   --color-text-muted:    #948f88;  /* secondary text: gray                   */
 
-  --color-border:        #2a2521;  /* hairline borders / dividers            */
+  --color-border:        #37302a;  /* hairline borders / dividers            */
 
   /* --- Typography -------------------------------------------------------- */
-  /* System font stacks: no web-font download, fast and readable everywhere. */
-  --font-sans:  system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: Georgia, "Times New Roman", Cambria, serif; /* used for headings */
+  /* Clean, Apple-style sans-serif. Uses San Francisco (SF Pro) on Apple
+     devices and Segoe UI on Windows — both crisp and modern. No web-font
+     download, so the site stays fast. Headings use this stack too now. */
+  --font-sans:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", Cambria, serif; /* kept available; no longer used */
 
-  --fs-hero:    clamp(2.4rem, 6vw, 4rem);   /* big hero headline (fluid)      */
+  /* Heading weight + letter-spacing, tuned for a sleek, thin, Apple-like feel.
+     Want headings even THINNER? lower --fw-heading to 500 (or 400).
+     Want them heavier? raise it to 700. One change updates every heading. */
+  --fw-heading:  600;
+  --track-tight: -0.022em;  /* subtle negative letter-spacing on large text */
+
+  --fs-hero:    clamp(1.9rem, 4.4vw, 3.1rem); /* hero headline (fluid)         */
   --fs-h1:      clamp(1.9rem, 4vw, 2.6rem);
   --fs-h2:      clamp(1.4rem, 3vw, 1.8rem);
   --fs-body:    1.05rem;
   --line-body:  1.75;                        /* generous line-height for prose */
 
   /* --- Spacing & sizing -------------------------------------------------- */
-  --max-width:    1040px;  /* max width of the centered content column        */
+  --max-width:    1280px;  /* max width of the centered content column        */
   --max-text:     680px;   /* narrower width for long-form reading comfort    */
+  --max-essays:   1200px;  /* wider measure for the essays page               */
+  --nav-height:   92px;    /* height of the sticky top nav (used by the hero) */
   --gap:          1.25rem; /* default gap between stacked elements            */
   --section-pad:  clamp(3rem, 8vw, 6rem); /* vertical padding between sections */
   --radius:       10px;    /* corner radius for cards, buttons, media         */
@@ -88,6 +98,8 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--fs-body);
+  font-weight: 400;              /* regular body weight; kept light and clean */
+  letter-spacing: -0.006em;      /* a hair tighter — reads crisper on dark bg */
   line-height: var(--line-body);
   /* Font smoothing for crisper text on dark backgrounds. */
   -webkit-font-smoothing: antialiased;
@@ -98,12 +110,14 @@ body {
   flex-direction: column;
 }
 
-/* Headings use the serif stack and the warm brown accent for a cinematic feel. */
+/* Headings: clean sans-serif, warm brown accent, thin weight + tight tracking
+   for that modern, Apple-like look. */
 h1, h2, h3 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);          /* sans-serif, not serif */
   color: var(--color-accent);
-  line-height: 1.2;
-  font-weight: 600;
+  line-height: 1.15;
+  font-weight: var(--fw-heading);         /* thinner than before (see :root) */
+  letter-spacing: var(--track-tight);     /* tight tracking like Apple titles */
 }
 
 /* Links: brown by default, lighter brown on hover/focus. */
@@ -170,6 +184,13 @@ main {
   margin-bottom: 0;
 }
 
+/* A brighter, larger prose variant — used for the "Life and Views" text. */
+.prose--lead p {
+  font-size: 1.22rem;
+  line-height: 1.7;
+  color: #cdc7be;   /* a little whiter than the muted gray */
+}
+
 
 /* -----------------------------------------------------------------------------
    4. NAVIGATION (top bar)
@@ -188,16 +209,21 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between; /* pushes wordmark + links apart */
-  min-height: 68px;
+  min-height: var(--nav-height);
 }
 
 /* The "Lalaland" wordmark — placeholder brand text, easy to change in HTML. */
 .wordmark {
-  font-family: var(--font-serif);
-  font-size: 1.4rem;
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   color: var(--color-text);   /* wordmark stays near-white, not brown */
+}
+/* The wordmark in the TOP NAV is the brand mark, so it's much larger. */
+.site-nav .wordmark {
+  font-size: 2.7rem;          /* ~2x bigger; lower this if it feels too big */
+  line-height: 1;
 }
 .wordmark:hover,
 .wordmark:focus-visible {
@@ -225,35 +251,73 @@ main {
 /* -----------------------------------------------------------------------------
    5. HERO (home page top section)
    -------------------------------------------------------------------------- */
+/* The hero is a full-width, two-column split (text left, photo right). It is
+   NOT wrapped in .container, so the photo can bleed to the screen's edge. */
 .hero {
-  padding-block: var(--section-pad);
+  display: grid;
+  /* Left column grows; the right column holds the photo + caption. */
+  grid-template-columns: minmax(0, 1fr) clamp(340px, 42vw, 480px);
+  align-items: stretch;
+  min-height: calc(100vh - var(--nav-height)); /* fill most of the viewport */
+}
+
+/* LEFT column: headline + intro + video, vertically centered. */
+.hero__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Left padding is computed so the headline lines up exactly with the nav
+     wordmark and the sections below (all share the same container gutter).
+     Order: top  right  bottom  left. */
+  padding: clamp(2.5rem, 6vw, 5rem)
+           clamp(1.75rem, 3vw, 3.5rem)
+           clamp(2.5rem, 6vw, 5rem)
+           max(1.5rem, calc((100vw - var(--max-width)) / 2 + 1.5rem));
 }
 .hero__title {
   font-size: var(--fs-hero);
+  letter-spacing: -0.03em;   /* large display text gets tighter tracking */
+  line-height: 1.08;
   margin-bottom: 1.2rem;
 }
 .hero__intro {
-  max-width: var(--max-text);
+  max-width: 46ch;           /* keep the intro line length comfortable */
   color: var(--color-text-muted);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
   margin-bottom: 2.5rem;
 }
-
-/* The media grid holds the hero photo and video side by side on wide screens,
-   and stacks them on narrow screens (see the responsive section). */
-.hero__media {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gap);
+/* The video sits below the intro, inside the left column. */
+.hero__video {
+  width: 100%;
+  max-width: 560px;          /* don't let it get too wide in the column */
 }
 
-/* Hero photo: rounded corners + subtle border to frame it on the dark bg. */
-.hero__photo {
+/* RIGHT column: the large photo, filling its column edge-to-edge. */
+.hero__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* vertically center the photo */
+  align-items: flex-start;    /* sit it toward the LEFT of its column */
+  padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem);
+}
+.hero__figure {
+  margin: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;          /* fill the box without distortion */
+  max-width: 400px;           /* a good, large size for the portrait photo */
+}
+.hero__photo {
+  display: block;
+  width: 100%;
+  height: auto;               /* the WHOLE photo, natural shape, nothing cropped */
   border-radius: var(--radius);
-  border: 1px solid var(--color-border);
+}
+.hero__caption {
+  margin-top: 0.85rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-style: italic;
+  letter-spacing: -0.005em;
 }
 
 /* --- Responsive 16:9 video wrapper -------------------------------------
@@ -275,6 +339,124 @@ main {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* --- Video facade (click-to-play preview) + lightbox overlay -------------
+   The ".video" preview is a 16:9 button with a play symbol. Clicking it opens
+   the big player in the #video-modal overlay (wired up in script.js). */
+.video {
+  width: 100%;
+  max-width: 560px;           /* preview size inside the hero's left column */
+}
+.video__facade {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-top: 56.25%;        /* 16:9 */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--color-surface-2), var(--color-surface));
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--transition);
+}
+.video__facade:hover,
+.video__facade:focus-visible {
+  border-color: var(--color-accent);
+}
+/* The round play button in the middle. */
+.video__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transition: background-color var(--transition), transform var(--transition);
+}
+/* The white-ish triangle inside the play button (a CSS-only "▶"). */
+.video__play::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 11px 0 11px 19px;
+  border-color: transparent transparent transparent var(--color-bg);
+}
+.video__facade:hover .video__play {
+  background: var(--color-accent-hover);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+.video__label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  text-align: center;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+/* The lightbox overlay (hidden until opened). */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.video-modal[hidden] {
+  display: none;              /* override the flex display when hidden */
+}
+.video-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+.video-modal__dialog {
+  position: relative;
+  z-index: 1;                 /* sit above the backdrop */
+  width: min(1100px, 92vw);
+}
+.video-modal__frame {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;        /* 16:9 big player */
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+}
+.video-modal__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-modal__close {
+  position: absolute;
+  top: -2.6rem;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.video-modal__close:hover,
+.video-modal__close:focus-visible {
+  color: var(--color-accent-hover);
 }
 
 
@@ -323,17 +505,18 @@ main {
   padding-block: clamp(2.5rem, 6vw, 4rem);
 }
 .callout__text {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fs-h2);
+  font-weight: 500;
   color: var(--color-accent);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--track-tight);
 }
 
 /* --- Essays accordion --------------------------------------------------- */
 /* Each essay is one <article class="essay">. The title is a button that
    toggles the panel below it open/closed (behaviour lives in script.js). */
 .essay-list {
-  max-width: var(--max-text);
+  max-width: var(--max-essays);  /* wider than prose: uses more of the screen */
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -358,8 +541,10 @@ main {
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--font-serif);
-  font-size: 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-accent);
   transition: background-color var(--transition);
 }
@@ -391,15 +576,30 @@ main {
 .essay__panel-inner {
   /* Padding lives on an inner element so it doesn't affect the collapsed
      (max-height:0) state — the outer panel can close fully to zero. */
-  padding: 0 1.25rem 1.4rem;
+  padding: 0 1.75rem 1.8rem;
   color: var(--color-text-muted);
+  font-size: 1.22rem;        /* larger body text for comfortable reading */
+  line-height: 1.8;
 }
 .essay__panel-inner p {
   margin-bottom: 1rem;
 }
+/* Headings inside an essay (the "# Title" line renders as one of these).
+   Kept modest so the essay's title reads as a small subheading. */
+.essay__panel-inner h1,
+.essay__panel-inner h2,
 .essay__panel-inner h3 {
-  font-size: 1.15rem;
-  margin: 1.2rem 0 0.6rem;
+  font-size: 2rem;           /* large subtitle, clearly above the body text */
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-accent);
+  margin: 1.6rem 0 0.9rem;
+}
+/* The first heading (the essay's title/subtitle) sits flush at the top. */
+.essay__panel-inner h1:first-child,
+.essay__panel-inner h2:first-child,
+.essay__panel-inner h3:first-child {
+  margin-top: 0;
 }
 
 /* The download-PDF button sits at the bottom of the open panel. */
@@ -481,16 +681,41 @@ main {
    Everything above is written desktop-first; these overrides kick in on
    narrow screens. 720px is our breakpoint for stacking two-column layouts.
    -------------------------------------------------------------------------- */
-@media (max-width: 720px) {
-  /* Stack the hero photo + video vertically instead of side by side. */
-  .hero__media {
+/* Hero: below 900px the split is too cramped, so stack it. The photo moves
+   to the top as a banner, then the text + video below it. */
+@media (max-width: 900px) {
+  .hero {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
+  .hero__right {
+    order: -1;              /* photo on top */
+    align-items: center;    /* center the photo on small screens */
+    padding: 1.75rem 1.5rem 0;
+  }
+  .hero__figure {
+    max-width: 300px;
+  }
+  .hero__left {
+    padding: 2.25rem 1.5rem;
+  }
+  .hero__intro {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
   /* Stack the contact photo + details vertically. */
   .contact-grid {
     grid-template-columns: 1fr;
   }
-  /* Tighten the nav: smaller gap, slightly smaller links. */
+  /* Tighten the nav: shorter bar, smaller wordmark + links. */
+  .site-nav .container {
+    min-height: 72px;
+  }
+  .site-nav .wordmark {
+    font-size: 1.9rem;
+  }
   .nav-links {
     gap: 1rem;
     font-size: 0.9rem;
