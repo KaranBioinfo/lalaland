@@ -1,9 +1,12 @@
 # Lalaland
 
 A small, static personal website — **plain HTML, CSS, and vanilla JavaScript**.
-No framework, no build step, no dependencies for the site itself. It's designed
-to be hosted on **Cloudflare Pages** (every file stays well under the 25 MiB
-per-file limit).
+No framework, no build step, no dependencies for the site itself.
+
+**Live at:** <https://lalaland.in> (also reachable at
+<https://lalaland.karan42lala.workers.dev>).
+Hosted on **Cloudflare Pages**, auto-deployed from GitHub (every file stays well
+under Cloudflare's 25 MiB per-file limit).
 
 ---
 
@@ -184,13 +187,77 @@ git push
 
 ---
 
-## Going live (Cloudflare Pages)
+## Hosting, domain & how a visitor reaches the site
 
-This is a static site, so hosting needs **no build step**:
+The site is live at **https://lalaland.in**. Here is the full chain and who
+does what.
 
-1. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages →
-   Connect to Git** and choose the `lalaland` repo.
-2. **Framework preset:** None. **Build command:** leave empty.
-   **Build output directory:** `/` (the repo root).
-3. **Save and Deploy.** Cloudflare gives you a `https://lalaland.pages.dev`
-   address and automatically re-deploys every time you `git push` to `main`.
+### The deploy path — how your edits reach the internet
+
+```
+  your computer  ──git push──►  GitHub (KaranBioinfo/lalaland)
+                                      │   Cloudflare watches this repo
+                                      ▼
+                             Cloudflare Pages  ──copies files worldwide──►  live site
+                             (no build step — just serves the static files)
+```
+
+Every push to the `main` branch auto-deploys in about a minute. There is no
+manual file upload.
+
+### The request path — how a visitor reaches lalaland.in
+
+```
+  visitor types lalaland.in
+        │
+        ▼
+  DNS lookup ("what's the address for lalaland.in?")
+        │   answered by Cloudflare's nameservers (chan / justin.ns.cloudflare.com)
+        ▼
+  Cloudflare edge (the server nearest the visitor)
+        │   serves your files over HTTPS (free auto-renewing certificate)
+        ▼
+  the browser downloads the files and draws Lalaland
+```
+
+### Who owns / controls what
+
+| Piece                | Where            | What it does                                     |
+|----------------------|------------------|--------------------------------------------------|
+| The code             | GitHub           | master copy + full history of the site's files   |
+| Hosting              | Cloudflare Pages | serves the files to visitors; auto-deploys        |
+| The domain name      | Hostinger        | `lalaland.in` is registered (rented) here         |
+| DNS for the domain   | Cloudflare       | nameservers point here, so the name maps to the site |
+| Email `@lalaland.in` | Hostinger        | still works, via the MX/SPF/DKIM/DMARC records    |
+
+### Key DNS records (Cloudflare dashboard → lalaland.in → DNS)
+
+- **`lalaland.in` → the Cloudflare Pages project.** Created automatically when
+  the domain was added under the project's **Custom domains** tab — this is what
+  points the domain at your site. (The original Hostinger `A`/`AAAA` records,
+  which pointed at Hostinger's own server, were deleted so the site could take
+  over the apex.)
+- **`www.lalaland.in`** → CNAME to `lalaland.in`.
+- **Email records, left untouched:** two `MX` (mx1/mx2.hostinger.com), `TXT`
+  SPF and DMARC, and the `hostingermail-*._domainkey` / `autoconfig` /
+  `autodiscover` CNAMEs.
+
+### Recreating this hosting from scratch
+
+1. Cloudflare → **Workers & Pages → Create → Pages → Connect to Git** → pick the
+   `lalaland` repo. Framework preset **None**, build command **empty**, output
+   directory `/`. Save and Deploy → gives a free `*.workers.dev` / `*.pages.dev`
+   address.
+2. Add the domain to Cloudflare (**Add a domain**), then at Hostinger change the
+   domain's **nameservers** to the two Cloudflare ones. Wait for it to go Active.
+3. In the Pages project → **Custom domains** → add `lalaland.in` (and
+   `www.lalaland.in`). Cloudflare creates the DNS record and the HTTPS cert.
+
+### Troubleshooting: "it still shows an old page"
+
+That's almost always a **stale DNS cache on your own device**, not a server
+problem. The live site is whatever the Cloudflare address
+(`lalaland.karan42lala.workers.dev`) serves. Fix your device with
+`ipconfig /flushdns` (run as administrator) and an incognito window, restart the
+computer, or just wait an hour for the cache to expire. A different device or
+your phone on mobile data will show the current site immediately.
